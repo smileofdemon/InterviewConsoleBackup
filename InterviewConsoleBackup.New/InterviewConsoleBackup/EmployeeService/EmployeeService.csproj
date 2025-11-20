@@ -109,14 +109,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomServiceHost.cs" />
+    <Compile Include="DI\CustomServiceHost.cs" />
     <Compile Include="EmployeeService.svc.cs">
       <DependentUpon>EmployeeService.svc</DependentUpon>
     </Compile>
-    <Compile Include="EmployeeServiceFactory.cs" />
-    <Compile Include="IEmployeeService.cs" />
-    <Compile Include="InstanceProvider.cs" />
-    <Compile Include="InstanceProviderBehavior.cs" />
+    <Compile Include="DI\EmployeeServiceFactory.cs" />
+    <Compile Include="Interfaces\IEmployeeService.cs" />
+    <Compile Include="DI\InstanceProvider.cs" />
+    <Compile Include="DI\InstanceProviderBehavior.cs" />
     <Compile Include="Models\EmployeeDto.cs" />
     <Compile Include="Models\EmployeeEnableDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
