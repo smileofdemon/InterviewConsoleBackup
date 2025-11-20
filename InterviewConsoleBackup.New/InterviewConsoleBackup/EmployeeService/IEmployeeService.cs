@@ -1,24 +1,22 @@
-﻿using System.ServiceModel;
+﻿using EmployeeService.Models;
+using System.ServiceModel;
 using System.ServiceModel.Web;
 
 
 namespace EmployeeService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
     public interface IEmployeeService
     {
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "GetEmployeeById?id={id}",
+        [WebInvoke(Method = "GET", UriTemplate = "employees/{id}",
             ResponseFormat = WebMessageFormat.Json,  BodyStyle = WebMessageBodyStyle.Bare)]
-        string GetEmployeeById(int id);
+        EmployeeDto GetEmployeeById(string id);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "EnableEmployee?id={id}", 
-            BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool EnableEmployee(int id, int enable);
+        [WebInvoke(Method = "PUT", UriTemplate = "employees/{id}",
+            RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        EmployeeEnableDto EnableEmployee(string id, EmployeeEnableDto dto);
     }
-
-	
 }

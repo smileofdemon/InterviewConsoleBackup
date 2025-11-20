@@ -1,31 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using Newtonsoft.Json;
+using System.ServiceModel.Web;
+using EmployeeService.Models;
+using EmployeeService.Repositories.Interfaces;
 
 namespace EmployeeService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "EmployeeService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select EmployeeService.svc or EmployeeService.svc.cs at the Solution Explorer and start debugging.
     public class EmployeeService : IEmployeeService
     {
-        public string GetEmployeeById(int id)
-        {
+        private readonly IEmployeeRepository _employeeRepository;
 
-            return string.Empty;
+        public EmployeeService(IEmployeeRepository employeeRepository)
+        {
+            _employeeRepository = employeeRepository;
         }
 
-      
-
-        public bool EnableEmployee(int id, int enable)
+        public EmployeeDto GetEmployeeById(string id)
         {
-            return false;
+            try
+            {
+                var employee = _employeeRepository.GetById(id);
+                if (employee == null)
+                    throw new WebFaultException<string>("Employee not found", System.Net.HttpStatusCode.NotFound);
+
+                return employee;
+            }
+            catch (SqlException ex)
+            {
+                throw new WebFaultException<string>($"Database error: {ex.Message}", System.Net.HttpStatusCode.InternalServerError);
+            }
         }
 
-     
+        public EmployeeEnableDto EnableEmployee(string id, EmployeeEnableDto dto)
+        {
+            try
+            {
+                _employeeRepository.Enable(id, dto);
+                return dto;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new WebFaultException<string>(ex.Message, System.Net.HttpStatusCode.NotFound);
+            }
+            catch (SqlException ex)
+            {
+                throw new WebFaultException<string>($"Database error: {ex.Message}", System.Net.HttpStatusCode.InternalServerError);
+            }
+        }
     }
-
-      
 }
